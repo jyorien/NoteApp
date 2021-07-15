@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.loginBtn.setOnClickListener {
             val email = binding.loginEmail.text.toString().trim()
-            val pass = binding.loginEmail.text.toString().trim()
+            val pass = binding.loginPass.text.toString().trim()
 //            if (email.isEmpty() || pass.isEmpty())
 //                return@setOnClickListener
             mAuth.signInWithEmailAndPassword(email, pass)
