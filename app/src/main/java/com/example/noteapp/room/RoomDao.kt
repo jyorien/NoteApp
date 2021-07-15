@@ -12,7 +12,7 @@ interface RoomDao {
     @Insert
     fun addNote(note: NoteEntity)
 
-    @Query("SELECT * FROM NoteEntity")
+    @Query("SELECT * FROM NoteEntity ORDER BY uid DESC")
     fun getNotes(): LiveData<List<NoteEntity>>
 
     @Delete

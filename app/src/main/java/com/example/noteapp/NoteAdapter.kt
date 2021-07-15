@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapp.room.NoteEntity
 
-class NoteAdapter(private val onCheckboxClick: (NoteEntity) -> Unit, val onBellClick: (NoteEntity) -> Unit) : ListAdapter<NoteEntity, ViewHolder>(ItemComparator()) {
+class NoteAdapter(private val onCheckboxClick: (NoteEntity) -> Unit, val onBellClick: (NoteEntity) -> Unit, val onItemClick: (NoteEntity) -> Unit) : ListAdapter<NoteEntity, ViewHolder>(ItemComparator()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.note_list_item, parent, false)
@@ -19,7 +19,7 @@ class NoteAdapter(private val onCheckboxClick: (NoteEntity) -> Unit, val onBellC
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), onCheckboxClick, onBellClick)
+        holder.bind(getItem(position), onCheckboxClick, onBellClick, onItemClick)
     }
 }
 
@@ -29,7 +29,7 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val checkbox = itemView.findViewById<CheckBox>(R.id.list_checkbox)
     val bell = itemView.findViewById<ImageButton>(R.id.note_notif)
 
-    fun bind(note: NoteEntity,onCheckboxClick: (NoteEntity) -> Unit, onBellClick: (NoteEntity) -> Unit) {
+    fun bind(note: NoteEntity,onCheckboxClick: (NoteEntity) -> Unit, onBellClick: (NoteEntity) -> Unit, onItemClick: (NoteEntity) -> Unit) {
         title.text = note.noteTitle
         desc.text = note.noteDesc
         checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -40,6 +40,9 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         bell.setOnClickListener {
             onBellClick(note)
+        }
+        itemView.setOnClickListener {
+            onItemClick(note)
         }
     }
 }

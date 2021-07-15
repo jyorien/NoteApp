@@ -9,10 +9,12 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.inputmethodservice.InputMethodService
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -44,6 +46,14 @@ class NoteActivity : AppCompatActivity(), SensorEventListener {
                 // bell onclick
                 sendNotification(it.noteTitle, it.noteDesc)
 
+            },
+            {
+                // item onclick
+                Intent(this, DetailActivity::class.java).also { intent->
+                    intent.putExtra(TEXT_TITLE, it.noteTitle)
+                    intent.putExtra(TEXT_DESC, it.noteDesc)
+                    startActivity(intent)
+                }
             }
         )
         binding.noteList.adapter = adapter
@@ -55,6 +65,12 @@ class NoteActivity : AppCompatActivity(), SensorEventListener {
             val title = binding.noteTitle.text.toString().trim()
             val desc = binding.noteDesc.text.toString().trim()
             viewModel.addNote(title, desc)
+            binding.noteList.smoothScrollToPosition(0)
+            binding.noteTitle.text.clear()
+            binding.noteTitle.clearFocus()
+            binding.noteDesc.text.clear()
+            binding.noteDesc.clearFocus()
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(it.windowToken, 0)
         }
 
     }
@@ -79,8 +95,6 @@ class NoteActivity : AppCompatActivity(), SensorEventListener {
                 notify(100,builder.build())
             }
 
-        } else {
-            TODO("VERSION.SDK_INT < O")
         }
     }
 
